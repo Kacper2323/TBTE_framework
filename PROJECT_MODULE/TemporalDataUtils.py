@@ -2,7 +2,12 @@ import matplotlib.pyplot as plt
 import matplotlib.colors
 import pandas as pd
 
-def check_completeness(data: pd.DataFrame, interval, index=True, time_feature: str=None, show_plot=False) -> list:
+def check_completeness(data: pd.DataFrame,
+                       freq: str, 
+                       index: bool=True, 
+                       time_feature: str=None, 
+                       show_plot :bool=False
+                       ) -> list:
 
     '''
     Check temporal data for completeness. Accepts data sorted by time with DateTime feature.
@@ -14,7 +19,7 @@ def check_completeness(data: pd.DataFrame, interval, index=True, time_feature: s
         If time data is in the index
     time_feature: str
         if *index* is false, column with time data
-    interval: str 
+    freq: str 
         pandas freq ex. '15min'
     show_plot: bool
         show plot of missing values
@@ -26,10 +31,10 @@ def check_completeness(data: pd.DataFrame, interval, index=True, time_feature: s
     '''
 
     if index:
-        time_range = pd.date_range(data.index.min(), data.index.max(), freq=interval)
+        time_range = pd.date_range(data.index.min(), data.index.max(), freq=freq)
         diff = pd.Series(time_range.difference(data.index))
     else:
-        time_range = pd.date_range(data[time_feature].min(), data[time_feature].max(), freq=interval)
+        time_range = pd.date_range(data[time_feature].min(), data[time_feature].max(), freq=freq)
         diff = pd.Series(time_range.difference(data[time_feature]))
         
     if diff.empty:
@@ -88,7 +93,7 @@ def time_to_ms(feature: pd.Series) -> pd.Series:
     return feature.astype('int64').astype('float') / 10**6
 
 
-def kline_quickchart(data: pd.DataFrame, interval) -> None:
+def kline_quickchart(data: pd.DataFrame, interval: int) -> None:
 
     '''
     Create a quick, non-interactive klines chart.
@@ -114,8 +119,6 @@ def kline_quickchart(data: pd.DataFrame, interval) -> None:
 
     prices_up = prices.loc[prices.Open<=prices.Close, :]
     prices_down = prices.loc[prices.Open>prices.Close, :]
-    # prices_up["change"] = prices_up.Open - prices_up.Close
-    # prices_down["change"] = prices_down.Close - prices_down.Open
 
     x_labels_up = list(prices_up.index)
     x_labels_down = list(prices_down.index)
@@ -135,8 +138,8 @@ def kline_quickchart(data: pd.DataFrame, interval) -> None:
     plt.bar(x_ticks_down, prices_down.Low - prices_down.Close, width=candle_width, bottom=prices_down["Close"], color=down_color)
     plt.bar(x_ticks_down, prices_down.High - prices_down.Open, width=candle_width, bottom=prices_down["Open"], color=down_color)
 
-    if interval>22:
-        custom_ticks = range(0, interval, int(interval/22))
+    if interval>25:
+        custom_ticks = range(interval-1, 0, -int(interval/25))
         custom_labels = prices.iloc[custom_ticks].index
         plt.xticks(custom_ticks, custom_labels)
     else:
