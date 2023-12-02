@@ -42,20 +42,16 @@ def check_completeness(data: pd.DataFrame,
         
     missing_data = []
     beg = diff[0]
-
     for i in diff.index:
-
         if i == diff.index.max():
             missing_data.append((beg, diff[i]))
             break
-
         if diff[i] + time_range.freq == diff[i+1]:
             continue
         else:
             missing_data.append((beg, diff[i]))
             beg = diff[i+1]
     
-
     if show_plot == True:
 
         time_x = pd.DataFrame(time_range)
