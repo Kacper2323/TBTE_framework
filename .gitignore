@@ -1,2 +1,3 @@
 PROJECT_ENV/
 PROJECT_MODULE/__pycache__/
+test*
