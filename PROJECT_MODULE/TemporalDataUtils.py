@@ -2,6 +2,12 @@ import matplotlib.pyplot as plt
 import matplotlib.colors
 import pandas as pd
 
+'''
+Set of utility functions for plotting/manipulating time based data.
+'''
+
+__all__ = ['check_completeness', 'ms_to_time', 'time_to_ms', 'kline_quickchart']
+
 def check_completeness(data: pd.DataFrame,
                        freq: str, 
                        index: bool=True, 
@@ -40,7 +46,7 @@ def check_completeness(data: pd.DataFrame,
     if diff.empty:
         return []
         
-    missing_data = []
+    missing_data = []   #this is the return value, code below calculates ranges based on list of missing timestamps
     beg = diff[0]
     for i in diff.index:
         if i == diff.index.max():

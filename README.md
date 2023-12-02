@@ -1,5 +1,7 @@
 ## TBTE Framework is (will be) a set of tools to train and evaluate machine learning based trading bots.
 
+## For examples see **notebook.ipynb**. It's easier to keep them there since there is too many changes this early in the project.
+
 For now, I am still uncertain about the architecture of the project. It will for sure change over time, maybe completely.
 
 BinanceAPI.py is self explanatory, it contains a BinanceClient class handling communication with the servers.
